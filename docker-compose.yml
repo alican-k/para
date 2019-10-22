@@ -1,0 +1,30 @@
+---
+version: '3.7'
+
+services:
+  docs:
+    build:
+      context: .
+      dockerfile: dockerfiles/docs.Dockerfile
+    ports:
+      - 8080:8080
+    volumes:
+      - ./docs:/app
+
+  backend:
+    image: joinpara/coding-challenge-backend:latest
+    environment:
+      CHALLENGE_BACKEND_APP_ENV: development
+      CHALLENGE_BACKEND_APP_HOST: 0.0.0.0
+      CHALLENGE_BACKEND_APP_PORT: 9876
+      CHALLENGE_BACKEND_DATABASE_PATH: /app/http-server.db
+      CHALLENGE_BACKEND_JSON_SCHEMA_PATH: /app/resources
+    ports:
+      - 9876:9876
+
+  app:
+    build:
+      context: ./app
+      dockerfile: ../dockerfiles/app.Dockerfile
+    ports:
+      - 7272:7272

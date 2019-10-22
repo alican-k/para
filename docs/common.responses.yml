@@ -1,0 +1,24 @@
+---
+InternalServerError:
+  description: A generic response about an internal server error
+  content:
+    application/json:
+      schema:
+        $ref: 'common.schemas.yml#/Errors'
+ValidationErrors:
+  description: A generic response about an internal server error
+  content:
+    application/json:
+      schema:
+        $ref: 'common.schemas.yml#/Errors'
+RecordNotFound:
+  description: Record not found
+  content:
+    application/json:
+      schema:
+        $ref: 'common.schemas.yml#/GenericResponseWithoutData'
+      examples:
+        'crud.record_not_found':
+          value:
+            code: crud.record_not_found
+            messsage: Record not found

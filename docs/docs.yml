@@ -1,0 +1,257 @@
+---
+openapi: "3.0.0"
+info:
+  title: Developer API specification
+  description: Open API Specification for Para's React/FE challenge
+  version: "1.0.0"
+  contact:
+    name: Kareem Hepburn
+    email: kareem@joinpara.com
+    url: https://joinpara.app
+servers:
+  - url: https://localhost:9876
+paths:
+<<<<<<< HEAD
+=======
+  /seed:
+    post:
+      summary: Endpoint to seed the database
+      description: |-
+        Endpoint for seeding the backend database. Note that if the server is
+        restarted the data is lost
+      tags:
+        - Seed
+      responses:
+        '200':
+          description: Response after successfully seeding database
+          content:
+            application/json:
+              schema:
+                description: |-
+                  Response payload when an account has timesheets
+                type: object
+                properties:
+                  code:
+                    $ref: 'common.attributes.yml#/Code'
+                  message:
+                    $ref: 'common.attributes.yml#/Message'
+                  data:
+                    type: object
+                    properties:
+                      account_id:
+                        description: Unique identifier for the given record
+                        type: string
+                        minLength: 1
+              examples:
+                'crud.create_success':
+                  value:
+                    code: crud.create_success
+                    message: Successfully created record
+                    data:
+                      data:
+                        account_id: '889239835035218'
+>>>>>>> 21834b1... Initial commit, still need more docs
+  /account/timesheets:
+    get:
+      summary: Get Account Timesheets
+      description: |-
+        Get the timesheets for a given account
+      parameters:
+        - in: query
+          name: account_id
+          schema:
+            type: string
+            pattern: '^\d*$'
+          description: The unique identifier for an account
+      tags:
+        - Account
+        - Timesheets
+      responses:
+        '404':
+          $ref: 'common.responses.yml#/RecordNotFound'
+        '422':
+          $ref: 'common.responses.yml#/ValidationErrors'
+        '500':
+          $ref: 'common.responses.yml#/InternalServerError'
+        '200':
+          description: |-
+            Response when an account is matched (regardless if they have
+            a timesheet or not).
+          content:
+            application/json:
+              schema:
+                description: |-
+                  Response payload when an account has timesheets
+                type: object
+                properties:
+                  code:
+                    $ref: 'common.attributes.yml#/Code'
+                  message:
+                    $ref: 'common.attributes.yml#/Message'
+                  data:
+                    type: object
+                    properties:
+                      account_id:
+                        description: Unique identifier for the given record
+                        type: string
+                        minLength: 1
+                      timesheets:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            timesheet_id:
+                              type: string
+                              minLength: 1
+                            start_time:
+                              type: string
+                              pattern: "^(?:[1-9]\\d{3}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1\\d|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[1-9]\\d(?:0[48]|[2468][048]|[13579][26])|(?:[2468][048]|[13579][26])00)-02-29)T(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:Z|[+-][01]\\d:?[0-5]\\d|(?:[.]\\d+Z?)?)$"
+                            end_time:
+                              type: string
+                              pattern: "^(?:[1-9]\\d{3}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1\\d|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[1-9]\\d(?:0[48]|[2468][048]|[13579][26])|(?:[2468][048]|[13579][26])00)-02-29)T(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:Z|[+-][01]\\d:?[0-5]\\d|(?:[.]\\d+Z?)?)$"
+                          required:
+                          - timesheet_id
+                          - start_time
+                          - end_time
+                    additionalProperties: false
+                    required:
+                    - account_id
+                    - timesheets
+                required:
+                  - code
+                  - message
+                  - data
+              examples:
+                'crud.create_success':
+                  value:
+                    code: 'crud.record_found'
+                    message: 'Record found'
+                    data:
+                      account_id: '2038822188888884224'
+                      timesheets:
+                        - timesheet_id: '2030626707400034223'
+                          start_time: '2019-04-26T07:00:00.000000Z'
+                          end_time: '2019-04-26T17:00:00.000000Z'
+                        - timesheet_id: '2030626707400034224'
+                          start_time: '2019-04-27T07:00:00.000000Z'
+                          end_time: '2019-04-27T17:00:00.000000Z'
+                        - timesheet_id: '2030626707400034225'
+                          start_time: '2019-04-28T07:00:00.000000Z'
+                          end_time: '2019-04-28T17:00:00.000000Z'
+    post:
+      summary: Update time card entries
+      description: |-
+        End point for updating time card entries in batch
+      tags:
+        - Account
+        - Timesheets
+      requestBody:
+        description: Request payload for creating a job
+        required: true
+        content:
+          application/json:
+            schema:
+              description: |-
+                Schema used to validate the request payload for updating time
+                card entries
+              type: object
+              properties:
+                data:
+                  type: object
+                  properties:
+                    account_id:
+                      type: string
+                      minLength: 1
+                    timesheets:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          timesheet_id:
+                            type: string
+                            minLength: 1
+                          start_time:
+                            description: The time the shift starts. Uses a timestamp pattern for
+                              regex validation
+                            type: string
+                            pattern: "^(?:[1-9]\\d{3}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1\\d|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[1-9]\\d(?:0[48]|[2468][048]|[13579][26])|(?:[2468][048]|[13579][26])00)-02-29)T(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:Z|[+-][01]\\d:?[0-5]\\d|(?:[.]\\d+Z?)?)$"
+                          end_time:
+                            description: The time the shift ends. It must not be less than the start_time.
+                              Uses a timestamp pattern for regex validation
+                            type: string
+                            pattern: "^(?:[1-9]\\d{3}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1\\d|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[1-9]\\d(?:0[48]|[2468][048]|[13579][26])|(?:[2468][048]|[13579][26])00)-02-29)T(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:Z|[+-][01]\\d:?[0-5]\\d|(?:[.]\\d+Z?)?)$"
+                        required:
+                        - start_time
+                        - end_time
+                  required:
+                  - account_id
+                  - timesheets
+              required:
+              - data
+              additionalProperties: false
+            examples:
+              'valid':
+                value:
+                  data:
+                    account_id: '733176143328034'
+                    timesheets:
+                      - timesheet_id: HVwUPrYN0sIrzgN51WUMPB
+                        start_time: '2019-10-25T20:05:01Z'
+                        end_time: '2019-10-26T20:05:01Z'
+                      - timesheet_id: HVwUPrYN0sIrzgN51WUMRs
+                        start_time: '2019-10-27T20:05:01Z'
+                        end_time: '2019-10-28T20:05:01Z'
+                      - timesheet_id: HVwUPrYN0sIrzgN51WUMUZ
+                        start_time: '2019-10-29T20:05:01Z'
+                        end_time: '2019-10-30T20:05:01Z'
+                      - timesheet_id: HVwUPrYN0sIrzgN51WUMXG
+                        start_time: '2019-10-31T20:05:01Z'
+                        end_time: '2019-11-01T20:05:01Z'
+                      - timesheet_id: HVwUPrYN0sIrzgN51WUMZx
+                        start_time: '2019-11-02T20:05:01Z'
+                        end_time: '2019-11-03T20:05:01Z'
+                      - timesheet_id: HVwUPrYN0sIrzgN51WUMce
+                        start_time: '2019-11-04T20:05:01Z'
+                        end_time: '2019-11-05T20:05:01Z'
+                      - timesheet_id: HVwUPrYN0sIrzgN51WUMfL
+                        start_time: '2019-11-06T20:05:01Z'
+                        end_time: '2019-11-07T20:05:01Z'
+                      - timesheet_id: HVwUPrYN0sIrzgN51WUMi2
+                        start_time: '2019-11-08T20:05:01Z'
+                        end_time: '2019-11-09T20:05:01Z'
+                      - timesheet_id: HVwUPrYN0sIrzgN51WUMkj
+                        start_time: '2019-11-10T20:05:01Z'
+                        end_time: '2019-11-11T20:05:01Z'
+                      - timesheet_id: HVwUPrYN0sIrzgN51WUMnQ
+                        start_time: '2019-11-12T20:05:01Z'
+                        end_time: '2019-11-13T20:05:01Z'
+      responses:
+              '404':
+                $ref: 'common.responses.yml#/RecordNotFound'
+              '422':
+                $ref: 'common.responses.yml#/ValidationErrors'
+              '500':
+                $ref: 'common.responses.yml#/InternalServerError'
+              '200':
+                description: |-
+                  Response when an account is matched (regardless if they have
+                  a timesheet or not).
+                content:
+                  application/json:
+                    schema:
+                      description: |-
+                        Response payload after calling the endpoint
+                      type: object
+                      properties:
+                        code:
+                          $ref: 'common.attributes.yml#/Code'
+                        message:
+                          $ref: 'common.attributes.yml#/Message'
+                      required:
+                        - code
+                        - message
+                    examples:
+                      'crud.update_success':
+                        value:
+                          code: crud.update_success
+                          message: Successfully updated records

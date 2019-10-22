@@ -1,0 +1,12 @@
+---
+Code:
+  description: |-
+    Code returned by the application that determines the outcome of a specific
+    action.
+  type: string
+  required: true
+Message:
+  description: |-
+    The messagea that accompanies the application code (`code`)
+  type: string
+  required: true

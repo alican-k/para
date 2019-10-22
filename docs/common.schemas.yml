@@ -1,0 +1,76 @@
+---
+Errors:
+  type: object
+  properties:
+    code:
+      $ref: 'common.attributes.yml#/Code'
+    message:
+      $ref: 'common.attributes.yml#/Message'
+    errors:
+      type: array
+      items:
+        $ref: '#/Error'
+  required:
+    - code
+    - message
+Error:
+  description: Error object that contains information regarding the error
+  type: object
+  properties:
+    error_id:
+      description: A unique ID that is denotes the error occurance and is used to determine server side errors
+      type: string
+    links:
+      type: array
+      items:
+        $ref: '#/ErrorLinks'
+    status:
+      description: HTTP status code in string. Example, 'Forbidden', 'OK', etc.
+      type: string
+    title:
+      description: Summary of the error
+      type: string
+    detail:
+      description: Definition of the error. This may be omitted
+      type: string
+    source:
+      description: Source of the error from the request
+      type: object
+      $ref: '#/ErrorSource'
+  required:
+    - error_id
+ErrorLinks:
+  description: |-
+    ErrorLinks is used to provide an About URL that leads to further
+    details about the particular occurrence of the problem for more
+    information see http://jsonapi.org/format/#error-objects
+  type: object
+  properties:
+    about:
+      description: The link to the details of the particular error
+ErrorSource:
+  description: Source of the error. Normally pertains to the paramters passed. This may be ommitted
+  type: object
+  properties:
+    pointer:
+      description: JSON resource payload attribute that caused the error
+      type: string
+    parameter:
+      description: Query or form parameter that caused the error
+      type: string
+    value:
+      description: Value that causes the error. If there is no value, this is omitted
+      type: string
+GenericResponseWithoutData:
+  description: A generic schema that does not contain a data attribute
+  type: object
+  properties:
+    code:
+      description: Application specific code
+      type: string
+    message:
+      description: Application specific code message
+      type: string
+  required:
+    - code
+    - message
