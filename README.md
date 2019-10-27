@@ -10,7 +10,7 @@ To run the backend application run the following command at the root directory
 of this repository:
 
 ```
-docker-compose up http-server
+docker-compose up backend
 ```
 
 To kill the app, simply press `CTRL-C` or open a new terminal in the same
