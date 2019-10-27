@@ -11,8 +11,6 @@ info:
 servers:
   - url: https://localhost:9876
 paths:
-<<<<<<< HEAD
-=======
   /seed:
     post:
       summary: Endpoint to seed the database
@@ -50,7 +48,6 @@ paths:
                     data:
                       data:
                         account_id: '889239835035218'
->>>>>>> 21834b1... Initial commit, still need more docs
   /account/timesheets:
     get:
       summary: Get Account Timesheets
